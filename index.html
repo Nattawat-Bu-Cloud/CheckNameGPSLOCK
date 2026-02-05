@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Student Check-In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { --primary:#6C63FF; --bg:#1F2029; --card-bg:rgba(255,255,255,0.05); --text:#fff; --success:#00C851; --danger:#ff4444; }
+        * { margin:0; padding:0; box-sizing:border-box; user-select:none; /* ห้ามคลุมดำ */ -webkit-user-select:none; }
+        body { font-family:'Kanit',sans-serif; background:var(--bg); color:var(--text); height:100vh; display:flex; justify-content:center; align-items:center; overflow:hidden; }
+        #splash-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:9999; display:flex; justify-content:center; align-items:center; flex-direction:column; transition:opacity 0.5s ease-out; }
+        .loader { width:50px; height:50px; border:5px solid #FFF; border-bottom-color:var(--primary); border-radius:50%; animation:rotation 1s linear infinite; }
+        @keyframes rotation { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+        .card { background:var(--card-bg); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1); padding:30px; border-radius:20px; width:90%; max-width:400px; text-align:center; box-shadow:0 15px 35px rgba(0,0,0,0.3); transition:transform 0.3s; }
+        h1 { margin-bottom:5px; font-weight:700; color:var(--primary); }
+        p.subtitle { color:#888; font-size:14px; margin-bottom:25px; }
+        .input-group { margin-bottom:15px; text-align:left; }
+        label { font-size:14px; color:#aaa; margin-left:5px; display:block; margin-bottom:5px; }
+        input { width:100%; padding:12px 15px; background:rgba(0,0,0,0.2); border:1px solid #444; color:#fff; border-radius:10px; font-family:'Kanit'; font-size:16px; outline:none; transition:0.3s; }
+        input:focus { border-color:var(--primary); background:rgba(0,0,0,0.4); }
+        .btn { background:var(--primary); color:white; padding:14px; width:100%; border:none; border-radius:50px; cursor:pointer; font-size:16px; font-weight:bold; margin-top:10px; transition:all 0.2s; display:flex; justify-content:center; align-items:center; gap:10px; }
+        .btn:active { transform:scale(0.95); }
+        .btn:disabled { background:#444; cursor:not-allowed; transform:none; }
+        #status-msg { margin-top:20px; font-size:14px; min-height:20px; opacity:0; transition:opacity 0.3s; }
+        #success-view { display:none; flex-direction:column; align-items:center; padding:20px 0; }
+        .checkmark-circle { width:80px; height:80px; border-radius:50%; background:var(--success); display:flex; align-items:center; justify-content:center; margin-bottom:20px; animation:popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .checkmark-circle i { font-size:40px; color:white; }
+        @keyframes popIn { 0% { transform:scale(0); } 100% { transform:scale(1); } }
+        .hidden { display:none!important; }
+        .shake { animation:shake 0.4s ease-in-out; }
+        @keyframes shake { 0%,100% { transform:translateX(0); } 25% { transform:translateX(-10px); } 75% { transform:translateX(10px); } }
+    </style>
+</head>
+<body oncontextmenu="return false;"> <div id="splash-screen">
+        <div class="loader"></div>
+        <h3 style="margin-top:20px; letter-spacing:1px;">CHECK-IN SYSTEM</h3>
+    </div>
+
+    <div class="card" id="main-card">
+        <div id="form-view">
+            <h1><i class="fas fa-university"></i> ลงชื่อเข้าเรียน</h1>
+            <p class="subtitle" id="date-display">loading...</p>
+            <div class="input-group"><label>ชื่อ-นามสกุล</label><input type="text" id="fullname" placeholder="ชื่อจริง นามสกุลจริง"></div>
+            <div class="input-group"><label>รหัสนักศึกษา</label><input type="tel" id="student_id" placeholder="รหัส 10 หลัก" maxlength="10"></div>
+            <button class="btn" id="submitBtn" onclick="startCheckin()"><span>ยืนยันพิกัดและลงชื่อ</span><i class="fas fa-location-arrow"></i></button>
+        </div>
+        <div id="success-view">
+            <div class="checkmark-circle"><i class="fas fa-check"></i></div>
+            <h2 style="color:var(--success);">ลงชื่อสำเร็จ!</h2>
+            <p style="color:#aaa; margin-top:10px;">บันทึกข้อมูลเรียบร้อยแล้ว</p>
+        </div>
+        <div id="status-msg"></div>
+    </div>
+
+    <script>
+        document.addEventListener('keydown', function(e) {
+            // ป้องกัน F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (e.keyCode == 123 || 
+                (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || 
+                (e.ctrlKey && e.keyCode == 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+    <script src="core.js"></script> 
+</body>
+</html>
